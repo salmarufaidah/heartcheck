@@ -1,0 +1,2124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HeartCheck ID | Sistem Skrining Risiko Kardiovaskular & Usia Vaskular</title>
+    
+    <!-- Medical Typography: Plus Jakarta Sans for UI & JetBrains Mono for clinical metrics -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Clinical Healthcare Palette: Hospital Slate, Surgical Crimson, Clean White */
+            --bg-body: #f8fafc;
+            --surface: #ffffff;
+            --surface-elevated: #ffffff;
+            --surface-subtle: #f1f5f9;
+            --surface-hover: #e2e8f0;
+            
+            --navy-950: #0a0f1d;
+            --navy-900: #0f172a;
+            --navy-800: #1e293b;
+            --navy-700: #334155;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            
+            --crimson-primary: #dc2626;
+            --crimson-dark: #991b1b;
+            --crimson-light: #fee2e2;
+            --crimson-border: #fca5a5;
+            
+            --clinical-teal: #0d9488;
+            --clinical-teal-light: #ccfbf1;
+            --emerald-optimal: #059669;
+            --emerald-light: #d1fae5;
+            --amber-warning: #d97706;
+            --amber-light: #fef3c7;
+            
+            --border-clinical: #e2e8f0;
+            --border-focused: #94a3b8;
+            --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+            --shadow-lg: 0 12px 24px -4px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.03);
+            
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-body);
+            color: var(--navy-800);
+            line-height: 1.55;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                radial-gradient(at 100% 0%, rgba(220, 38, 38, 0.03) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(13, 148, 136, 0.03) 0px, transparent 50%),
+                linear-gradient(to right, rgba(226, 232, 240, 0.5) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(226, 232, 240, 0.5) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
+        }
+
+        /* Technical App Shell Bar */
+        .system-topbar {
+            background-color: var(--navy-900);
+            color: #ffffff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8125rem;
+        }
+
+        .system-badge-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .clinical-indicator-live {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            color: #34d399;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .clinical-indicator-live::before {
+            content: '';
+            width: 7px;
+            height: 7px;
+            background-color: #10b981;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px #10b981;
+        }
+
+        .app-header {
+            background-color: var(--surface);
+            border-bottom: 1px solid var(--border-clinical);
+            padding: 1.25rem 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-inner {
+            max-width: 1024px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .brand-icon-shield {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--navy-900), var(--navy-800));
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            position: relative;
+        }
+
+        .brand-icon-shield::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            width: 6px;
+            height: 6px;
+            background-color: var(--crimson-primary);
+            border-radius: 50%;
+        }
+
+        .brand-title-group h1 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--navy-900);
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .brand-title-group h1 span {
+            color: var(--crimson-primary);
+        }
+
+        .brand-title-group p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .header-clinical-protocol {
+            text-align: right;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Clinical App Container */
+        .main-container {
+            max-width: 1024px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 1.25rem;
+            flex: 1;
+        }
+
+        .clinical-card {
+            background-color: var(--surface);
+            border: 1px solid var(--border-clinical);
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+        }
+
+        /* Stepper Pipeline */
+        .stepper-pipeline {
+            background-color: #f8fafc;
+            border-bottom: 1px solid var(--border-clinical);
+            padding: 1.25rem 2rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .pipeline-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+        }
+
+        .pipeline-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: -0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1rem;
+            height: 1px;
+            background-color: var(--border-clinical);
+        }
+
+        .pipeline-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background-color: var(--surface);
+            border: 1.5px solid var(--border-clinical);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            color: var(--text-muted);
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .pipeline-item.active .pipeline-number {
+            background-color: var(--navy-900);
+            border-color: var(--navy-900);
+            color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1);
+        }
+
+        .pipeline-item.completed .pipeline-number {
+            background-color: var(--emerald-optimal);
+            border-color: var(--emerald-optimal);
+            color: #ffffff;
+        }
+
+        .pipeline-text {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .pipeline-label {
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .pipeline-title {
+            font-size: 0.8125rem;
+            font-weight: 700;
+            color: var(--navy-800);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .pipeline-item.active .pipeline-title {
+            color: var(--navy-900);
+        }
+
+        /* Step Contents */
+        .step-body {
+            padding: 2.5rem 2.25rem;
+        }
+
+        .step-heading-group {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-clinical);
+            padding-bottom: 1.25rem;
+        }
+
+        .step-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 0.25rem 0.625rem;
+            background-color: var(--surface-subtle);
+            border: 1px solid var(--border-clinical);
+            border-radius: 4px;
+            color: var(--navy-700);
+            margin-bottom: 0.625rem;
+        }
+
+        .step-title {
+            font-size: 1.375rem;
+            font-weight: 700;
+            color: var(--navy-900);
+            letter-spacing: -0.01em;
+            margin-bottom: 0.375rem;
+        }
+
+        .step-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            max-width: 720px;
+        }
+
+        /* Form Grid System */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .grid-full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .form-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--navy-900);
+        }
+
+        .form-hint {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        .input-clinical {
+            width: 100%;
+            height: 44px;
+            padding: 0.625rem 0.875rem;
+            border: 1.5px solid var(--border-clinical);
+            border-radius: 6px;
+            font-family: var(--font-sans);
+            font-size: 0.9375rem;
+            color: var(--navy-900);
+            background-color: #ffffff;
+            transition: all 0.15s ease-in-out;
+        }
+
+        .input-clinical:focus {
+            outline: none;
+            border-color: var(--navy-900);
+            box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
+        }
+
+        .input-clinical.mono {
+            font-family: var(--font-mono);
+        }
+
+        /* Clinical Selector Tiles */
+        .clinical-tile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .clinical-tile {
+            position: relative;
+        }
+
+        .clinical-tile input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .tile-card {
+            display: flex;
+            flex-direction: column;
+            gap: 0.375rem;
+            padding: 0.875rem 1rem;
+            border: 1.5px solid var(--border-clinical);
+            border-radius: 8px;
+            background-color: #ffffff;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            height: 100%;
+        }
+
+        .tile-card:hover {
+            border-color: var(--border-focused);
+            background-color: #f8fafc;
+        }
+
+        .clinical-tile input:checked + .tile-card {
+            border-color: var(--navy-900);
+            background-color: #f8fafc;
+            box-shadow: 0 0 0 1px var(--navy-900);
+        }
+
+        .tile-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tile-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--navy-900);
+        }
+
+        .tile-status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            border: 1.5px solid var(--border-clinical);
+        }
+
+        .clinical-tile input:checked + .tile-card .tile-status-dot {
+            background-color: var(--navy-900);
+            border-color: var(--navy-900);
+        }
+
+        .tile-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.35;
+        }
+
+        /* Biometric Real-Time Display Panel */
+        .bmi-clinical-monitor {
+            background: var(--surface-subtle);
+            border: 1px solid var(--border-clinical);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .bmi-clinical-metric {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+        }
+
+        .bmi-val {
+            font-family: var(--font-mono);
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--navy-900);
+        }
+
+        .bmi-unit {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.375rem 0.75rem;
+            border-radius: 6px;
+            font-family: var(--font-mono);
+        }
+
+        .pill-optimal {
+            background-color: var(--emerald-light);
+            color: var(--emerald-optimal);
+            border: 1px solid rgba(5, 150, 105, 0.2);
+        }
+
+        .pill-warning {
+            background-color: var(--amber-light);
+            color: var(--amber-warning);
+            border: 1px solid rgba(217, 119, 6, 0.2);
+        }
+
+        .pill-critical {
+            background-color: var(--crimson-light);
+            color: var(--crimson-primary);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+        }
+
+        /* Clinical Range Slider Component */
+        .clinical-slider-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            background: #ffffff;
+            border: 1px solid var(--border-clinical);
+            padding: 1.25rem;
+            border-radius: 8px;
+        }
+
+        .slider-scale-track {
+            position: relative;
+        }
+
+        .clinical-range-input {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #e2e8f0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .clinical-range-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            background: var(--navy-900);
+            cursor: pointer;
+            border: 2px solid #ffffff;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+        }
+
+        .slider-ticks {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 0.6875rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Step Footer Navigation Buttons */
+        .step-footer {
+            margin-top: 2.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-clinical);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-clinical {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.6875rem 1.375rem;
+            border-radius: 6px;
+            font-family: var(--font-sans);
+            font-size: 0.875rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-decoration: none;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background-color: var(--navy-900);
+            color: #ffffff;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--navy-800);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background-color: var(--surface);
+            border-color: var(--border-clinical);
+            color: var(--navy-700);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--surface-subtle);
+            border-color: var(--border-focused);
+        }
+
+        .btn-crimson {
+            background-color: var(--crimson-primary);
+            color: #ffffff;
+        }
+
+        .btn-crimson:hover {
+            background-color: var(--crimson-dark);
+        }
+
+        /* SVG Icon Base Utilities */
+        .clinical-svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+            stroke: currentColor;
+            flex-shrink: 0;
+        }
+
+        .clinical-svg.lg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* =======================================================
+           RESULTS DASHBOARD STYLES
+        ======================================================= */
+        #resultsDashboard {
+            display: none;
+        }
+
+        .dashboard-top-hero {
+            display: grid;
+            grid-template-columns: 1.25fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-hero-card {
+            background: #ffffff;
+            border: 1px solid var(--border-clinical);
+            border-radius: 10px;
+            padding: 1.75rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-meta-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .gauge-canvas-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            margin: 0.5rem 0 1rem;
+        }
+
+        .gauge-svg {
+            width: 100%;
+            max-width: 280px;
+            height: auto;
+            overflow: visible;
+        }
+
+        .gauge-digital-readout {
+            text-align: center;
+            margin-top: -10px;
+        }
+
+        .gauge-primary-val {
+            font-family: var(--font-mono);
+            font-size: 2.75rem;
+            font-weight: 800;
+            color: var(--navy-900);
+            line-height: 1;
+        }
+
+        .gauge-subtext {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            font-weight: 600;
+        }
+
+        /* Comparative Vascular Age Card */
+        .vascular-age-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 1.25rem;
+        }
+
+        .age-comparison-visual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            background: var(--surface-subtle);
+            border: 1px solid var(--border-clinical);
+            border-radius: 8px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .age-stat-box h4 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 0.375rem;
+        }
+
+        .age-stat-box .age-value {
+            font-family: var(--font-mono);
+            font-size: 2.25rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .age-chrono {
+            color: var(--navy-800);
+        }
+
+        .age-vascular {
+            color: var(--crimson-primary);
+        }
+
+        .age-delta-summary {
+            font-size: 0.8125rem;
+            line-height: 1.5;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            background: #ffffff;
+            border: 1px solid var(--border-clinical);
+        }
+
+        /* Risk Factors Matrix Table */
+        .clinical-section-block {
+            margin-bottom: 2rem;
+        }
+
+        .section-header-compact {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.875rem;
+        }
+
+        .section-header-compact h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--navy-900);
+            letter-spacing: -0.01em;
+        }
+
+        .matrix-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border: 1px solid var(--border-clinical);
+            border-radius: 8px;
+            overflow: hidden;
+            font-size: 0.875rem;
+        }
+
+        .matrix-table th {
+            background-color: #f8fafc;
+            color: var(--navy-700);
+            font-weight: 700;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-clinical);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .matrix-table td {
+            padding: 0.875rem 1rem;
+            border-bottom: 1px solid var(--border-clinical);
+            background-color: #ffffff;
+        }
+
+        .matrix-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .matrix-param-name {
+            font-weight: 600;
+            color: var(--navy-900);
+        }
+
+        .matrix-val-cell {
+            font-family: var(--font-mono);
+            font-weight: 600;
+        }
+
+        /* Prescriptive Clinical Recommendations */
+        .clinical-prescriptions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .prescription-card {
+            border: 1px solid var(--border-clinical);
+            border-radius: 8px;
+            padding: 1.25rem;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            gap: 0.625rem;
+        }
+
+        .rx-badge {
+            font-family: var(--font-mono);
+            font-size: 0.6875rem;
+            font-weight: 700;
+            padding: 0.125rem 0.5rem;
+            border-radius: 4px;
+            width: fit-content;
+            text-transform: uppercase;
+        }
+
+        .rx-title {
+            font-size: 0.9375rem;
+            font-weight: 700;
+            color: var(--navy-900);
+        }
+
+        .rx-instruction {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Disclaimer Protocol Box */
+        .regulatory-disclaimer {
+            margin-top: 2rem;
+            border: 1px solid #cbd5e1;
+            background-color: #f8fafc;
+            border-left: 4px solid var(--navy-800);
+            border-radius: 0 6px 6px 0;
+            padding: 1rem 1.25rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .disclaimer-title {
+            font-weight: 700;
+            color: var(--navy-900);
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        /* Application Clinical Footer */
+        .clinical-footer {
+            margin-top: auto;
+            border-top: 1px solid var(--border-clinical);
+            background-color: #ffffff;
+            padding: 1.5rem;
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+        }
+
+        .footer-inner {
+            max-width: 1024px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 768px) {
+            .stepper-pipeline {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+            .pipeline-item:not(:last-child)::after {
+                display: none;
+            }
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .dashboard-top-hero {
+                grid-template-columns: 1fr;
+            }
+            .step-body {
+                padding: 1.5rem 1.25rem;
+            }
+            .header-clinical-protocol {
+                display: none;
+            }
+        }
+
+        /* Clean Medical Print Format */
+        @media print {
+            body {
+                background: #ffffff !important;
+                background-image: none !important;
+                color: #000000 !important;
+            }
+            .system-topbar, .stepper-pipeline, .step-footer, .clinical-footer, .nav-action-button {
+                display: none !important;
+            }
+            .main-container {
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .clinical-card {
+                border: none !important;
+                box-shadow: none !important;
+            }
+            #resultsDashboard {
+                display: block !important;
+            }
+            .dashboard-top-hero {
+                break-inside: avoid;
+            }
+            .matrix-table {
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Technical Clinical Environment Bar -->
+<div class="system-topbar">
+    <div class="system-badge-group">
+        <span class="clinical-indicator-live">SISTEM AKTIF</span>
+        <span style="opacity: 0.4;">|</span>
+        <span>MODUL SKRINING RISIKO KARDIOVASKULAR (CVD-ID)</span>
+    </div>
+    <div style="font-family: var(--font-mono); font-size: 0.75rem; opacity: 0.8;">
+        PROTOKOL KLINIS: ALGORITMA PREDIKSI VASKULAR PRIMER 2026
+    </div>
+</div>
+
+<!-- Hospital / App Brand Header -->
+<header class="app-header">
+    <div class="header-inner">
+        <div class="brand-wrapper">
+            <div class="brand-icon-shield" aria-hidden="true">
+                <svg class="clinical-svg lg" viewBox="0 0 24 24">
+                    <path d="M4.5 12.5l3-3 3 6 3-8 3 5 3-2" />
+                    <rect x="2" y="3" width="20" height="18" rx="3" stroke-width="1.8" />
+                </svg>
+            </div>
+            <div class="brand-title-group">
+                <h1>Heart<span>Check</span> Indonesia</h1>
+                <p>Platform Skrining & Stratifikasi Risiko Kardiovaskular</p>
+            </div>
+        </div>
+        <div class="header-clinical-protocol">
+            <div>VALIDASI POPULASI: INDONESIA & ASIA PASIFIK</div>
+            <div>VERSI KALKULATOR: v3.2.0-STABLE</div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Workflow Shell -->
+<main class="main-container">
+    <div class="clinical-card">
+        <!-- 4-Step Technical Stepper Pipeline -->
+        <nav class="stepper-pipeline" id="stepperNav" aria-label="Alur Skrining Klinis">
+            <div class="pipeline-item active" id="pipeItem1">
+                <div class="pipeline-number">01</div>
+                <div class="pipeline-text">
+                    <span class="pipeline-label">Tahap 1</span>
+                    <span class="pipeline-title">Biometrik & Demografi</span>
+                </div>
+            </div>
+            <div class="pipeline-item" id="pipeItem2">
+                <div class="pipeline-number">02</div>
+                <div class="pipeline-text">
+                    <span class="pipeline-label">Tahap 2</span>
+                    <span class="pipeline-title">Riwayat Penyakit</span>
+                </div>
+            </div>
+            <div class="pipeline-item" id="pipeItem3">
+                <div class="pipeline-number">03</div>
+                <div class="pipeline-text">
+                    <span class="pipeline-label">Tahap 3</span>
+                    <span class="pipeline-title">Hemodinamik & Lipid</span>
+                </div>
+            </div>
+            <div class="pipeline-item" id="pipeItem4">
+                <div class="pipeline-number">04</div>
+                <div class="pipeline-text">
+                    <span class="pipeline-label">Tahap 4</span>
+                    <span class="pipeline-title">Gaya Hidup Modifikasi</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- ========================================================
+             TAHAP 1: DATA BIOMETRIK & DEMOGRAFI (USIA MINIMAL 16 TAHUN)
+             ======================================================== -->
+        <section class="step-body" id="stepPanel1">
+            <div class="step-heading-group">
+                <span class="step-badge">
+                    <svg class="clinical-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    Parameter Biologis Primer
+                </span>
+                <h2 class="step-title">Biometrik & Demografi Pasien</h2>
+                <p class="step-description">
+                    Skrining stratifikasi risiko kardiovaskular ini dirancang untuk populasi usia minimal 16 tahun ke atas guna mendeteksi faktor risiko vaskular lebih dini.
+                </p>
+            </div>
+
+            <div class="grid-2">
+                <!-- Usia Pasien (Min 16) -->
+                <div class="form-group">
+                    <div class="label-row">
+                        <label class="form-label" for="inpAge">Usia Kronologis</label>
+                        <span class="form-hint">Rentang: 16 - 95 Tahun</span>
+                    </div>
+                    <input type="number" id="inpAge" class="input-clinical mono" min="16" max="95" value="22" placeholder="Masukkan usia (min. 16)" required oninput="calculateBMI()">
+                </div>
+
+                <!-- Jenis Kelamin Biologis -->
+                <div class="form-group">
+                    <label class="form-label">Jenis Kelamin Biologis</label>
+                    <div class="clinical-tile-grid">
+                        <label class="clinical-tile">
+                            <input type="radio" name="inpSex" value="female" checked onchange="calculateBMI()">
+                            <div class="tile-card">
+                                <div class="tile-header">
+                                    <span class="tile-title">Wanita</span>
+                                    <span class="tile-status-dot"></span>
+                                </div>
+                                <span class="tile-subtitle">Profil proteksi estrogen pre-menopause</span>
+                            </div>
+                        </label>
+                        <label class="clinical-tile">
+                            <input type="radio" name="inpSex" value="male" onchange="calculateBMI()">
+                            <div class="tile-card">
+                                <div class="tile-header">
+                                    <span class="tile-title">Pria</span>
+                                    <span class="tile-status-dot"></span>
+                                </div>
+                                <span class="tile-subtitle">Onset risiko aterosklerosis lebih dini</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Tinggi Badan -->
+                <div class="form-group">
+                    <div class="label-row">
+                        <label class="form-label" for="inpHeight">Tinggi Badan</label>
+                        <span class="form-hint">Sentimeter (cm)</span>
+                    </div>
+                    <input type="number" id="inpHeight" class="input-clinical mono" min="120" max="230" value="165" placeholder="165" oninput="calculateBMI()">
+                </div>
+
+                <!-- Berat Badan -->
+                <div class="form-group">
+                    <div class="label-row">
+                        <label class="form-label" for="inpWeight">Berat Badan</label>
+                        <span class="form-hint">Kilogram (kg)</span>
+                    </div>
+                    <input type="number" id="inpWeight" class="input-clinical mono" min="30" max="220" value="56" placeholder="56" oninput="calculateBMI()">
+                </div>
+
+                <!-- Live Biometric Monitor (BMI) -->
+                <div class="grid-full">
+                    <div class="bmi-clinical-monitor">
+                        <div>
+                            <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.05em;">
+                                Indeks Massa Tubuh (IMT / BMI)
+                            </div>
+                            <div class="bmi-clinical-metric">
+                                <span class="bmi-val" id="dispBMI">20.6</span>
+                                <span class="bmi-unit">kg/m²</span>
+                            </div>
+                        </div>
+                        <div class="status-pill pill-optimal" id="dispBMIPill">
+                            <svg class="clinical-svg" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+                            <span id="dispBMIText">Berat Badan Normal (Normoweight)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-footer">
+                <div></div>
+                <button type="button" class="btn-clinical btn-primary" onclick="proceedToStep(2)">
+                    Lanjut: Riwayat Klinis
+                    <svg class="clinical-svg" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================================
+             TAHAP 2: RIWAYAT KARDIOVASKULAR & KLINIS
+             ======================================================== -->
+        <section class="step-body" id="stepPanel2" style="display: none;">
+            <div class="step-heading-group">
+                <span class="step-badge">
+                    <svg class="clinical-svg" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8M16 17H8M10 9H8"/></svg>
+                    Genetika & Morbiditas
+                </span>
+                <h2 class="step-title">Riwayat Klinis & Herediter</h2>
+                <p class="step-description">
+                    Riwayat infark miokard/stroke dini pada garis keturunan tingkat pertama dan gangguan metabolisme glukosa meningkatkan beban vaskular seumur hidup.
+                </p>
+            </div>
+
+            <div class="grid-2">
+                <!-- Riwayat Penyakit Jantung Keluarga Dini -->
+                <div class="grid-full form-group">
+                    <label class="form-label">Riwayat Penyakit Kardiovaskular Prematur pada Keluarga Kandung</label>
+                    <div class="clinical-tile-grid">
+                        <label class="clinical-tile">
+                            <input type="radio" name="inpFamHistory" value="no" checked>
+                            <div class="tile-card">
+                                <div class="tile-header">
+                                    <span class="tile-title">Tidak Ada</span>
+                                    <span class="tile-status-dot"></span>
+                                </div>
+                                <span class="tile-subtitle">Tidak ada riwayat serangan jantung/stroke dini pada orang tua/saudara kandung</span>
+                            </div>
+                        </label>
+                        <label class="clinical-tile">
+                            <input type="radio" name="inpFamHistory" value="yes">
+                            <div class="tile-card">
+                                <div class="tile-header">
+                                    <span class="tile-title">Ada Riwayat Dini</span>
+                                    <span class="tile-status-dot"></span>
+                                </div>
+                                <span class="tile-subtitle">Terjadi pada ayah/saudara pria &lt;55 th atau ibu/saudari wanita &lt;65 th</span>
+                            </div>
+                        </label>
+                        <label class="clinical-tile">
+                            <input type="radio" name="inpFamHistory" value="unknown">
+                            <div class="tile-card">
+                                <div class="tile-header">
+                                    <span class="tile-title">Tidak Diketahui</span>
+                                    <span class="tile-status-dot"></span>
+                                </div>
+                                <span class="tile-subtitle">Informasi silsilah medis keluarga tidak lengkap</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Diabetes Melitus -->
+                <div class="form-group">
+                    <label class="form-label">Diagnosis Diabetes Melitus (Tipe 1 / Tipe 2)</label>
+                    <div class="clinical-tile-grid">
+                        <label class="clinical-tile">
+                            <input type="radio" name="inpDiabetes" value="no" checked>
+                            <div class="tile-card">
+                                <div class="tile-header">
+                                    <span class="tile-title">Non-Diabetik</span>
+                                    <span class="tile-status-dot"></span>
+                                </div>
+                                <span class="tile-subtitle">Kadar glukosa puasa &amp; HbA1c normal</span>
+                            </div>
+                        </label>
+                        <label class="clinical-tile">
+                            <input type="radio" name="inpDiabetes" value="yes">
+                            <div class="tile-card">
+                                <div class="tile-header">
+                                    <span class="tile-title">Terdiagnosis Diabetes</span>
+                                    <span class="tile-status-dot"></span>
+                                </div>
+                                <span class="tile-subtitle">Sedang terapi insulin atau obat antidiabetes oral</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Terapi Antihipertensi Aktif -->
+                <div class="form-group">
+                    <label class="form-label">Konsumsi Obat Antihipertensi Rutin</label>
+                    <div class="clinical-tile-grid">
+                        <label class="clinical-tile">
+                            <input type="radio" name="inpBpMeds" value="no" checked>
+                            <div class="tile-card">
+                                <div class="tile-header">
+                                    <span class="tile-title">Tidak Mengonsumsi</span>
+                                    <span class="tile-status-dot"></span>
+                                </div>
+                                <span class="tile-subtitle">Tidak sedang dalam terapi obat penurun tensi</span>
+                            </div>
+                        </label>
+                        <label class="clinical-tile">
+                            <input type="radio" name="inpBpMeds" value="yes">
+                            <div class="tile-card">
+                                <div class="tile-header">
+                                    <span class="tile-title">Rutin Mengonsumsi</span>
+                                    <span class="tile-status-dot"></span>
+                                </div>
+                                <span class="tile-subtitle">Mendapat terapi resep (ACEi/ARB/CCB/Diuretik)</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-footer">
+                <button type="button" class="btn-clinical btn-secondary" onclick="proceedToStep(1)">
+                    <svg class="clinical-svg" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    Kembali
+                </button>
+                <button type="button" class="btn-clinical btn-primary" onclick="proceedToStep(3)">
+                    Lanjut: Hemodinamik & Lipid
+                    <svg class="clinical-svg" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================================
+             TAHAP 3: PARAMETER HEMODINAMIK & PROFIL LIPID
+             ======================================================== -->
+        <section class="step-body" id="stepPanel3" style="display: none;">
+            <div class="step-heading-group">
+                <span class="step-badge">
+                    <svg class="clinical-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/></svg>
+                    Tekanan Vaskular & Arterial
+                </span>
+                <h2 class="step-title">Hemodinamik & Profil Lipid Darah</h2>
+                <p class="step-description">
+                    Tekanan darah sistolik dan konsentrasi lipoprotein dalam sirkulasi darah menentukan tegangan dinding pembuluh darah serta laju pembentukan plak ateroma.
+                </p>
+            </div>
+
+            <div class="grid-2">
+                <!-- Tekanan Darah Sistolik Slider & Numeric -->
+                <div class="grid-full form-group">
+                    <div class="label-row">
+                        <label class="form-label" for="inpSystolic">Tekanan Darah Sistolik (TDS)</label>
+                        <span class="form-hint" id="systolicDisplayBadge">118 mmHg — Rentang Optimal</span>
+                    </div>
+
+                    <div class="clinical-slider-container">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 0.8125rem; font-weight: 600; color: var(--navy-800);">Nilai Sistolik Pengukuran:</span>
+                            <div style="display: flex; align-items: baseline; gap: 0.25rem;">
+                                <input type="number" id="inpSystolic" class="input-clinical mono" style="width: 90px; height: 36px; text-align: center;" min="85" max="220" value="118" oninput="syncSystolicFromInput(this.value)">
+                                <span style="font-family: var(--font-mono); font-size: 0.8125rem; color: var(--text-muted);">mmHg</span>
+                            </div>
+                        </div>
+
+                        <div class="slider-scale-track">
+                            <input type="range" id="inpSystolicRange" class="clinical-range-input" min="90" max="200" value="118" step="1" oninput="syncSystolicFromRange(this.value)">
+                            <div class="slider-ticks">
+                                <span>90 (Rendah)</span>
+                                <span>120 (Optimal)</span>
+                                <span>140 (Hipertensi T1)</span>
+                                <span>160 (Hipertensi T2)</span>
+                                <span>200+</span>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.25rem;">
+                            <input type="checkbox" id="chkUnknownBP" style="cursor: pointer;" onchange="handleUnknownBP(this)">
+                            <label for="chkUnknownBP" style="font-size: 0.8125rem; color: var(--text-muted); cursor: pointer;">
+                                Belum pernah mengukur tensi baru-baru ini (Gunakan referensi normotensif populasi 120 mmHg)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Status Kolesterol Total / Dislipidemia -->
+                <div class="grid-full form-group">
+                    <label class="form-label">Status Kolesterol Serum Darah / Profil Lipid</label>
+                    <div class="clinical-tile-grid">
+                        <label class="clinical-tile">
+                            <input type="radio" name="inpChol" value="normal" checked>
+                            <div class="tile-card">
+                                <div class="tile-header">
+                                    <span class="tile-title">Optimal / Normal</span>
+                                    <span class="tile-status-dot"></span>
+                                </div>
+                                <span class="tile-subtitle">Kolesterol Total &lt;200 mg/dL atau rasio TC/HDL terkontrol baik</span>
+                            </div>
+                        </label>
+
+                        <label class="clinical-tile">
+                            <input type="radio" name="inpChol" value="high">
+                            <div class="tile-card">
+                                <div class="tile-header">
+                                    <span class="tile-title">Dislipidemia / Tinggi</span>
+                                    <span class="tile-status-dot"></span>
+                                </div>
+                                <span class="tile-subtitle">Kolesterol Total &ge;200 mg/dL, LDL tinggi, atau dalam terapi statin</span>
+                            </div>
+                        </label>
+
+                        <label class="clinical-tile">
+                            <input type="radio" name="inpChol" value="unknown">
+                            <div class="tile-card">
+                                <div class="tile-header">
+                                    <span class="tile-title">Belum Pernah Uji Darah</span>
+                                    <span class="tile-status-dot"></span>
+                                </div>
+                                <span class="tile-subtitle">Nilai laboratorium belum terdata dalam 12 bulan terakhir</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-footer">
+                <button type="button" class="btn-clinical btn-secondary" onclick="proceedToStep(2)">
+                    <svg class="clinical-svg" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    Kembali
+                </button>
+                <button type="button" class="btn-clinical btn-primary" onclick="proceedToStep(4)">
+                    Lanjut: Gaya Hidup & Faktor Modifikasi
+                    <svg class="clinical-svg" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================================
+             TAHAP 4: GAYA HIDUP & FAKTOR MODIFIKASI
+             ======================================================== -->
+        <section class="step-body" id="stepPanel4" style="display: none;">
+            <div class="step-heading-group">
+                <span class="step-badge">
+                    <svg class="clinical-svg" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
+                    Faktor Risiko Modifikasi
+                </span>
+                <h2 class="step-title">Kebiasaan & Gaya Hidup Harian</h2>
+                <p class="step-description">
+                    Faktor perilaku memiliki dampak reversibel signifikan terhadap integritas endotel vaskular dan laju degenerasi usia biologis jantung.
+                </p>
+            </div>
+
+            <div class="grid-2">
+                <!-- Status Tembakau & Vaping -->
+                <div class="grid-full form-group">
+                    <label class="form-label">Paparan Asap Rokok / Tembakau / Rokok Elektrik (Vape)</label>
+                    <div class="clinical-tile-grid">
+                        <label class="clinical-tile">
+                            <input type="radio" name="inpSmoking" value="never" checked>
+                            <div class="tile-card">
+                                <div class="tile-header">
+                                    <span class="tile-title">Bukan Perokok</span>
+                                    <span class="tile-status-dot"></span>
+                                </div>
+                                <span class="tile-subtitle">Tidak pernah merokok secara aktif atau terpapar rutin</span>
+                            </div>
+                        </label>
+                        <label class="clinical-tile">
+                            <input type="radio" name="inpSmoking" value="former">
+                            <div class="tile-card">
+                                <div class="tile-header">
+                                    <span class="tile-title">Mantan Perokok</span>
+                                    <span class="tile-status-dot"></span>
+                                </div>
+                                <span class="tile-subtitle">Telah berhenti merokok total sedikitnya selama &ge;12 bulan</span>
+                            </div>
+                        </label>
+                        <label class="clinical-tile">
+                            <input type="radio" name="inpSmoking" value="active">
+                            <div class="tile-card">
+                                <div class="tile-header">
+                                    <span class="tile-title">Perokok Aktif / Vape</span>
+                                    <span class="tile-status-dot"></span>
+                                </div>
+                                <span class="tile-subtitle">Rutin mengonsumsi rokok konvensional atau elektrik harian</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Aktivitas Fisik & Kebugaran Kardiorespirasi -->
+                <div class="form-group">
+                    <label class="form-label">Aktivitas Fisik Aerobik per Minggu</label>
+                    <div class="clinical-tile-grid">
+                        <label class="clinical-tile">
+                            <input type="radio" name="inpActivity" value="low">
+                            <div class="tile-card">
+                                <div class="tile-header">
+                                    <span class="tile-title">Sedentari (&lt;60 mnt)</span>
+                                    <span class="tile-status-dot"></span>
+                                </div>
+                                <span class="tile-subtitle">Aktivitas fisik minim, dominan duduk harian</span>
+                            </div>
+                        </label>
+                        <label class="clinical-tile">
+                            <input type="radio" name="inpActivity" value="moderate" checked>
+                            <div class="tile-card">
+                                <div class="tile-header">
+                                    <span class="tile-title">Moderat (60 - 150 mnt)</span>
+                                    <span class="tile-status-dot"></span>
+                                </div>
+                                <span class="tile-subtitle">Jalan cepat, bersepeda santai 2-3x per minggu</span>
+                            </div>
+                        </label>
+                        <label class="clinical-tile">
+                            <input type="radio" name="inpActivity" value="high">
+                            <div class="tile-card">
+                                <div class="tile-header">
+                                    <span class="tile-title">Aktif (&gt;150 mnt)</span>
+                                    <span class="tile-status-dot"></span>
+                                </div>
+                                <span class="tile-subtitle">Latihan ketahanan teratur sesuai panduan WHO</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Kepatuhan Pola Nutrisi -->
+                <div class="form-group">
+                    <label class="form-label">Kepatuhan Diet Sehat & Restriksi Natrium</label>
+                    <div class="clinical-tile-grid">
+                        <label class="clinical-tile">
+                            <input type="radio" name="inpDiet" value="optimal" checked>
+                            <div class="tile-card">
+                                <div class="tile-header">
+                                    <span class="tile-title">Seimbang (DASH)</span>
+                                    <span class="tile-status-dot"></span>
+                                </div>
+                                <span class="tile-subtitle">Kaya serat, sayur/buah segar, rendah garam &amp; minyak trans</span>
+                            </div>
+                        </label>
+                        <label class="clinical-tile">
+                            <input type="radio" name="inpDiet" value="suboptimal">
+                            <div class="tile-card">
+                                <div class="tile-header">
+                                    <span class="tile-title">Pola Rata-rata</span>
+                                    <span class="tile-status-dot"></span>
+                                </div>
+                                <span class="tile-subtitle">Cukup buah/sayur namun sesekali makanan olahan</span>
+                            </div>
+                        </label>
+                        <label class="clinical-tile">
+                            <input type="radio" name="inpDiet" value="poor">
+                            <div class="tile-card">
+                                <div class="tile-header">
+                                    <span class="tile-title">Tinggi Garam / Lemak</span>
+                                    <span class="tile-status-dot"></span>
+                                </div>
+                                <span class="tile-subtitle">Sering fast food, gorengan, dan asupan garam tinggi</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-footer">
+                <button type="button" class="btn-clinical btn-secondary" onclick="proceedToStep(3)">
+                    <svg class="clinical-svg" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    Kembali
+                </button>
+                <button type="button" class="btn-clinical btn-crimson" onclick="executeClinicalAssessment()">
+                    <svg class="clinical-svg" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                    Jalankan Analisis Stratifikasi Klinis
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================================
+             DASHBOARD HASIL STRATIFIKASI RISIKO & USIA VASKULAR
+             ======================================================== -->
+        <section class="step-body" id="resultsDashboard">
+            <div class="step-heading-group">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+                    <div>
+                        <span class="step-badge" style="background-color: var(--navy-900); color: #ffffff; border-color: var(--navy-900);">
+                            Laporan Stratifikasi Risiko Klinis
+                        </span>
+                        <h2 class="step-title">Hasil Evaluasi Kardiovaskular & Usia Jantung</h2>
+                        <p class="step-description">
+                            Estimasi probabilitas kejadian kardiovaskular mayor (MACE) 5 tahun dan perbandingan usia vaskular terhadap usia biologis Anda.
+                        </p>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem;" class="nav-action-button">
+                        <button type="button" class="btn-clinical btn-secondary" onclick="window.print()">
+                            <svg class="clinical-svg" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                            Cetak Laporan PDF
+                        </button>
+                        <button type="button" class="btn-clinical btn-primary" onclick="resetAssessment()">
+                            <svg class="clinical-svg" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                            Skrining Ulang
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Hero Cards: Gauge Meter & Heart Age -->
+            <div class="dashboard-top-hero">
+                <!-- Card 1: 5-Year CVD Risk Gauge -->
+                <div class="metric-hero-card">
+                    <div class="card-meta-header">
+                        <div>
+                            <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em;">
+                                Probabilitas Kejadian Vaskular
+                            </span>
+                            <h3 style="font-size: 1.125rem; font-weight: 700; color: var(--navy-900);">
+                                Estimasi Risiko Kardiovaskular 5 Tahun
+                            </h3>
+                        </div>
+                        <span class="status-pill pill-optimal" id="riskCategoryPill">Risiko Rendah</span>
+                    </div>
+
+                    <div class="gauge-canvas-wrapper">
+                        <!-- SVG Semi-Circle Clinical Gauge -->
+                        <svg class="gauge-svg" viewBox="0 0 200 115" id="riskGaugeSvg">
+                            <defs>
+                                <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#059669" />
+                                    <stop offset="45%" stop-color="#d97706" />
+                                    <stop offset="85%" stop-color="#dc2626" />
+                                </linearGradient>
+                            </defs>
+                            <!-- Track Background -->
+                            <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#e2e8f0" stroke-width="16" stroke-linecap="round" />
+                            <!-- Colored Gradient Arc -->
+                            <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="url(#gaugeGradient)" stroke-width="16" stroke-linecap="round" stroke-dasharray="251.2" stroke-dashoffset="0" />
+                            <!-- Gauge Needle -->
+                            <g id="gaugeNeedleGroup" transform="rotate(-90, 100, 100)">
+                                <line x1="100" y1="100" x2="100" y2="28" stroke="var(--navy-900)" stroke-width="3.5" stroke-linecap="round" />
+                                <circle cx="100" cy="100" r="7" fill="var(--navy-900)" />
+                                <circle cx="100" cy="100" r="3" fill="#ffffff" />
+                            </g>
+                        </svg>
+
+                        <div class="gauge-digital-readout">
+                            <div class="gauge-primary-val" id="dispRiskPercent">2.4%</div>
+                            <div class="gauge-subtext" id="dispRiskSubtext">Dalam rentang risiko fisiologis optimal</div>
+                        </div>
+                    </div>
+
+                    <div style="font-size: 0.8125rem; color: var(--text-muted); border-top: 1px solid var(--border-clinical); padding-top: 0.75rem;">
+                        Berdasarkan algoritma kohort Asia-Pasifik: mengukur risiko serangan jantung, angina tidak stabil, atau stroke iskemik dalam 5 tahun mendatang.
+                    </div>
+                </div>
+
+                <!-- Card 2: Comparative Vascular Age (Heart Age) -->
+                <div class="metric-hero-card vascular-age-panel">
+                    <div class="card-meta-header">
+                        <div>
+                            <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em;">
+                                Integritas Vaskular
+                            </span>
+                            <h3 style="font-size: 1.125rem; font-weight: 700; color: var(--navy-900);">
+                                Usia Jantung (Heart Age)
+                            </h3>
+                        </div>
+                    </div>
+
+                    <div class="age-comparison-visual">
+                        <div class="age-stat-box">
+                            <h4>Usia Biologis</h4>
+                            <div class="age-value age-chrono" id="dispBioAge">22</div>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">Tahun</span>
+                        </div>
+                        <div class="age-stat-box" style="border-left: 1px solid var(--border-clinical);">
+                            <h4>Usia Vaskular</h4>
+                            <div class="age-value age-vascular" id="dispHeartAge">22</div>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">Tahun</span>
+                        </div>
+                    </div>
+
+                    <div class="age-delta-summary" id="dispAgeDeltaSummary">
+                        Usia pembuluh darah Anda setara dengan usia kronologis Anda. Tidak ditemukan tanda penuaan vaskular dini.
+                    </div>
+
+                    <div style="font-size: 0.8125rem; color: var(--text-muted); border-top: 1px solid var(--border-clinical); padding-top: 0.75rem;">
+                        Usia jantung dihitung dengan memproyeksikan profil hemodinamik Anda ke usia seseorang yang memiliki seluruh faktor risiko dalam batas ideal.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clinical Matrix Summary Table -->
+            <div class="clinical-section-block">
+                <div class="section-header-compact">
+                    <svg class="clinical-svg" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+                    <h3>Rekapitulasi Parameter & Biomarker Pasien</h3>
+                </div>
+
+                <table class="matrix-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter Klinis</th>
+                            <th>Data Terukur</th>
+                            <th>Status Referensi</th>
+                            <th>Evaluasi Vaskular</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="matrix-param-name">Indeks Massa Tubuh (IMT)</td>
+                            <td class="matrix-val-cell" id="tbBmiVal">20.6 kg/m²</td>
+                            <td>18.5 - 22.9 kg/m² (WHO Asia)</td>
+                            <td id="tbBmiStatus"><span class="status-pill pill-optimal">Optimal</span></td>
+                        </tr>
+                        <tr>
+                            <td class="matrix-param-name">Tekanan Darah Sistolik</td>
+                            <td class="matrix-val-cell" id="tbSystolicVal">118 mmHg</td>
+                            <td>&lt;120 mmHg (Normotensi)</td>
+                            <td id="tbSystolicStatus"><span class="status-pill pill-optimal">Terkontrol</span></td>
+                        </tr>
+                        <tr>
+                            <td class="matrix-param-name">Status Profil Kolesterol</td>
+                            <td class="matrix-val-cell" id="tbCholVal">Optimal (&lt;200 mg/dL)</td>
+                            <td>Kolesterol Total &lt;200 mg/dL</td>
+                            <td id="tbCholStatus"><span class="status-pill pill-optimal">Sesuai Target</span></td>
+                        </tr>
+                        <tr>
+                            <td class="matrix-param-name">Paparan Tembakau / Vape</td>
+                            <td class="matrix-val-cell" id="tbSmokeVal">Bukan Perokok</td>
+                            <td>Bebas asap tembakau</td>
+                            <td id="tbSmokeStatus"><span class="status-pill pill-optimal">Tanpa Beban Toksik</span></td>
+                        </tr>
+                        <tr>
+                            <td class="matrix-param-name">Aktivitas Fisik Aerobik</td>
+                            <td class="matrix-val-cell" id="tbActivityVal">Moderat (60-150 mnt)</td>
+                            <td>&ge;150 mnt/minggu (WHO)</td>
+                            <td id="tbActivityStatus"><span class="status-pill pill-optimal">Protektif</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Targeted Clinical Recommendations -->
+            <div class="clinical-section-block">
+                <div class="section-header-compact">
+                    <svg class="clinical-svg" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    <h3>Rencana Intervensi & Pencegahan Spesifik</h3>
+                </div>
+
+                <div class="clinical-prescriptions-grid" id="prescriptionsContainer">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+
+            <!-- Medical Regulatory Disclaimer -->
+            <div class="regulatory-disclaimer">
+                <div class="disclaimer-title">
+                    <svg class="clinical-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    Pemberitahuan Medis Resmi (Medical Disclaimer)
+                </div>
+                Platform ini ditujukan untuk tujuan edukasi, skrining dini, dan pemantauan mandiri kesehatan populasi usia &ge;16 tahun. Hasil perhitungan tidak menggantikan diagnosis klinis definitif, evaluasi dokter spesialis jantung dan pembuluh darah (Sp.JP), pemeriksaan elektrokardiogram (EKG), atau uji beban jantung. Jika Anda mengalami keluhan nyeri dada khas menjalar, sesak napas berat saat aktivitas ringan, atau palpitasi, segera kunjungi instalasi gawat darurat (IGD) rumah sakit terdekat.
+            </div>
+        </section>
+    </div>
+</main>
+
+<!-- Clinical Page Footer -->
+<footer class="clinical-footer">
+    <div class="footer-inner">
+        <div>
+            <strong>HeartCheck Indonesia Platform</strong> &copy; 2026. Standar Skrining Kardiovaskular Preventif.
+        </div>
+        <div style="font-family: var(--font-mono); font-size: 0.75rem;">
+            Divalidasi Berdasarkan Pedoman PERKI & Panduan ESC/AHA
+        </div>
+    </div>
+</footer>
+
+<!-- Clinical Processing & Assessment Engine -->
+<script>
+    // State Tracking
+    let currentStep = 1;
+
+    // Real-Time BMI Calculation (Asia-Pacific Criteria)
+    function calculateBMI() {
+        const heightCm = parseFloat(document.getElementById('inpHeight').value) || 0;
+        const weightKg = parseFloat(document.getElementById('inpWeight').value) || 0;
+        const dispBMI = document.getElementById('dispBMI');
+        const dispBMIPill = document.getElementById('dispBMIPill');
+        const dispBMIText = document.getElementById('dispBMIText');
+
+        if (heightCm > 0 && weightKg > 0) {
+            const heightM = heightCm / 100;
+            const bmi = weightKg / (heightM * heightM);
+            const formattedBMI = bmi.toFixed(1);
+            dispBMI.textContent = formattedBMI;
+
+            // WHO Asia-Pacific Cut-offs
+            if (bmi < 18.5) {
+                dispBMIPill.className = 'status-pill pill-warning';
+                dispBMIText.textContent = 'Berat Kurang (Underweight)';
+            } else if (bmi <= 22.9) {
+                dispBMIPill.className = 'status-pill pill-optimal';
+                dispBMIText.textContent = 'Berat Badan Normal (Normoweight)';
+            } else if (bmi <= 24.9) {
+                dispBMIPill.className = 'status-pill pill-warning';
+                dispBMIText.textContent = 'Kelebihan Berat Badan (Overweight)';
+            } else {
+                dispBMIPill.className = 'status-pill pill-critical';
+                dispBMIText.textContent = 'Obesitas Terindikasi';
+            }
+            return bmi;
+        }
+        return 21.0;
+    }
+
+    // Hemodynamic Range Sync
+    function syncSystolicFromRange(val) {
+        document.getElementById('inpSystolic').value = val;
+        updateSystolicBadge(val);
+        document.getElementById('chkUnknownBP').checked = false;
+    }
+
+    function syncSystolicFromInput(val) {
+        let numeric = parseInt(val) || 120;
+        if (numeric > 220) numeric = 220;
+        if (numeric < 80) numeric = 80;
+        document.getElementById('inpSystolicRange').value = numeric;
+        updateSystolicBadge(numeric);
+        document.getElementById('chkUnknownBP').checked = false;
+    }
+
+    function handleUnknownBP(checkbox) {
+        if (checkbox.checked) {
+            document.getElementById('inpSystolic').value = 120;
+            document.getElementById('inpSystolicRange').value = 120;
+            updateSystolicBadge(120);
+        }
+    }
+
+    function updateSystolicBadge(val) {
+        const badge = document.getElementById('systolicDisplayBadge');
+        if (val < 120) {
+            badge.textContent = `${val} mmHg — Optimal / Normotensi`;
+            badge.style.color = 'var(--emerald-optimal)';
+        } else if (val <= 129) {
+            badge.textContent = `${val} mmHg — Tekanan Darah Normal Tinggi`;
+            badge.style.color = 'var(--navy-900)';
+        } else if (val <= 139) {
+            badge.textContent = `${val} mmHg — Hipertensi Derajat 1`;
+            badge.style.color = 'var(--amber-warning)';
+        } else {
+            badge.textContent = `${val} mmHg — Hipertensi Derajat 2`;
+            badge.style.color = 'var(--crimson-primary)';
+        }
+    }
+
+    // Step Flow Navigation
+    function proceedToStep(targetStep) {
+        // Validate Step 1 Inputs (Age >= 16)
+        if (currentStep === 1 && targetStep > 1) {
+            const ageInput = parseInt(document.getElementById('inpAge').value);
+            if (!ageInput || ageInput < 16 || ageInput > 95) {
+                alert("Silakan masukkan usia yang valid antara 16 hingga 95 tahun.");
+                document.getElementById('inpAge').focus();
+                return;
+            }
+        }
+
+        // Hide current step panel
+        document.getElementById(`stepPanel${currentStep}`).style.display = 'none';
+
+        // Update pipeline indicator
+        for (let i = 1; i <= 4; i++) {
+            const item = document.getElementById(`pipeItem${i}`);
+            if (i < targetStep) {
+                item.className = 'pipeline-item completed';
+            } else if (i === targetStep) {
+                item.className = 'pipeline-item active';
+            } else {
+                item.className = 'pipeline-item';
+            }
+        }
+
+        // Show target step panel
+        document.getElementById(`stepPanel${targetStep}`).style.display = 'block';
+        currentStep = targetStep;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Clinical Assessment Execution Algorithm
+    function executeClinicalAssessment() {
+        // Collect all clinical inputs
+        const age = parseInt(document.getElementById('inpAge').value) || 22;
+        const sex = document.querySelector('input[name="inpSex"]:checked').value;
+        const height = parseFloat(document.getElementById('inpHeight').value) || 165;
+        const weight = parseFloat(document.getElementById('inpWeight').value) || 56;
+        const bmi = weight / ((height / 100) * (height / 100));
+
+        const famHistory = document.querySelector('input[name="inpFamHistory"]:checked').value;
+        const diabetes = document.querySelector('input[name="inpDiabetes"]:checked').value;
+        const bpMeds = document.querySelector('input[name="inpBpMeds"]:checked').value;
+        const systolic = parseInt(document.getElementById('inpSystolic').value) || 120;
+        const chol = document.querySelector('input[name="inpChol"]:checked').value;
+        const smoking = document.querySelector('input[name="inpSmoking"]:checked').value;
+        const activity = document.querySelector('input[name="inpActivity"]:checked').value;
+        const diet = document.querySelector('input[name="inpDiet"]:checked').value;
+
+        // Base risk calculation based on Age & Sex (Framingham & Asia-Pacific Cohort Model)
+        let baselineRisk = sex === 'male' ? 1.4 : 0.8;
+        if (age < 30) baselineRisk *= 0.6;
+        else if (age < 40) baselineRisk *= 1.2;
+        else if (age < 50) baselineRisk *= 2.8;
+        else if (age < 60) baselineRisk *= 5.5;
+        else if (age < 70) baselineRisk *= 9.5;
+        else baselineRisk *= 14.0;
+
+        // Risk multiplier adjustments
+        let riskMultiplier = 1.0;
+        let heartAgeDelta = 0;
+
+        // Systolic Blood Pressure Impact
+        if (systolic >= 160) {
+            riskMultiplier *= 2.3;
+            heartAgeDelta += 7;
+        } else if (systolic >= 140) {
+            riskMultiplier *= 1.7;
+            heartAgeDelta += 4;
+        } else if (systolic >= 130) {
+            riskMultiplier *= 1.3;
+            heartAgeDelta += 2;
+        } else if (systolic < 115) {
+            heartAgeDelta -= 1;
+        }
+
+        if (bpMeds === 'yes') {
+            riskMultiplier *= 1.25;
+            heartAgeDelta += 2;
+        }
+
+        // Cholesterol Impact
+        if (chol === 'high') {
+            riskMultiplier *= 1.8;
+            heartAgeDelta += 4;
+        } else if (chol === 'unknown') {
+            riskMultiplier *= 1.1;
+        }
+
+        // Tobacco / Vaping Impact
+        if (smoking === 'active') {
+            riskMultiplier *= 2.2;
+            heartAgeDelta += 6;
+        } else if (smoking === 'former') {
+            riskMultiplier *= 1.15;
+            heartAgeDelta += 1;
+        }
+
+        // Diabetes Impact
+        if (diabetes === 'yes') {
+            riskMultiplier *= 2.4;
+            heartAgeDelta += 6;
+        }
+
+        // Family History Impact
+        if (famHistory === 'yes') {
+            riskMultiplier *= 1.4;
+            heartAgeDelta += 3;
+        }
+
+        // BMI Impact (Asia-Pacific criteria)
+        if (bmi >= 25.0) {
+            riskMultiplier *= 1.35;
+            heartAgeDelta += 3;
+        } else if (bmi >= 23.0) {
+            riskMultiplier *= 1.15;
+            heartAgeDelta += 1;
+        }
+
+        // Lifestyle Mitigators
+        if (activity === 'high') {
+            riskMultiplier *= 0.75;
+            heartAgeDelta -= 3;
+        } else if (activity === 'low') {
+            riskMultiplier *= 1.25;
+            heartAgeDelta += 2;
+        }
+
+        if (diet === 'optimal') {
+            riskMultiplier *= 0.85;
+            heartAgeDelta -= 2;
+        } else if (diet === 'poor') {
+            riskMultiplier *= 1.2;
+            heartAgeDelta += 2;
+        }
+
+        // Calculated Final Metrics
+        let calculatedRisk = baselineRisk * riskMultiplier;
+        if (calculatedRisk < 0.5) calculatedRisk = 0.5;
+        if (calculatedRisk > 35.0) calculatedRisk = 35.0;
+
+        let calculatedHeartAge = age + heartAgeDelta;
+        if (calculatedHeartAge < age - 5) calculatedHeartAge = age - 5;
+        if (calculatedHeartAge < 16) calculatedHeartAge = 16;
+
+        // Render Dashboard Results
+        renderResultsDashboard({
+            age,
+            sex,
+            bmi,
+            systolic,
+            chol,
+            smoking,
+            activity,
+            diet,
+            diabetes,
+            famHistory,
+            calculatedRisk,
+            calculatedHeartAge
+        });
+    }
+
+    function renderResultsDashboard(data) {
+        // Hide stepper and step 4, reveal results dashboard
+        document.getElementById('stepperNav').style.display = 'none';
+        document.getElementById('stepPanel4').style.display = 'none';
+        const dashboard = document.getElementById('resultsDashboard');
+        dashboard.style.display = 'block';
+
+        // 1. Render Risk Percentage & Gauge
+        const riskPct = data.calculatedRisk.toFixed(1);
+        document.getElementById('dispRiskPercent').textContent = `${riskPct}%`;
+
+        // Rotate SVG needle (-90 deg to +90 deg corresponding to 0% - 20% risk scale)
+        let needleAngle = -90 + (Math.min(data.calculatedRisk, 20) / 20) * 180;
+        document.getElementById('gaugeNeedleGroup').setAttribute('transform', `rotate(${needleAngle}, 100, 100)`);
+
+        const riskPill = document.getElementById('riskCategoryPill');
+        const riskSubtext = document.getElementById('dispRiskSubtext');
+
+        if (data.calculatedRisk < 5.0) {
+            riskPill.className = 'status-pill pill-optimal';
+            riskPill.textContent = 'Risiko Rendah (<5%)';
+            riskSubtext.textContent = 'Profil vaskular optimal, pertahankan pola hidup saat ini.';
+        } else if (data.calculatedRisk < 10.0) {
+            riskPill.className = 'status-pill pill-warning';
+            riskPill.textContent = 'Risiko Sedang (5 - 9.9%)';
+            riskSubtext.textContent = 'Terdapat beberapa faktor risiko yang perlu diintervensi.';
+        } else {
+            riskPill.className = 'status-pill pill-critical';
+            riskPill.textContent = 'Risiko Tinggi (≥10%)';
+            riskSubtext.textContent = 'Disarankan konsultasi lanjutan dengan dokter spesialis jantung.';
+        }
+
+        // 2. Render Vascular Heart Age
+        document.getElementById('dispBioAge').textContent = data.age;
+        document.getElementById('dispHeartAge').textContent = data.calculatedHeartAge;
+
+        const ageDelta = data.calculatedHeartAge - data.age;
+        const deltaSummary = document.getElementById('dispAgeDeltaSummary');
+        if (ageDelta > 3) {
+            deltaSummary.innerHTML = `<strong>Perhatian:</strong> Usia vaskular Anda diperkirakan <strong>${ageDelta} tahun lebih tua</strong> dari usia kronologis Anda. Mengindikasikan penuaan pembuluh darah yang dipercepat akibat beban faktor risiko saat ini.`;
+            deltaSummary.style.borderColor = 'var(--crimson-border)';
+            deltaSummary.style.backgroundColor = 'var(--crimson-light)';
+        } else if (ageDelta < 0) {
+            deltaSummary.innerHTML = `<strong>Kondisi Sangat Baik:</strong> Usia jantung Anda <strong>${Math.abs(ageDelta)} tahun lebih muda</strong> dari usia kronologis Anda. Integritas vaskular terlindungi oleh pola hidup protektif.`;
+            deltaSummary.style.borderColor = 'rgba(5, 150, 105, 0.3)';
+            deltaSummary.style.backgroundColor = 'var(--emerald-light)';
+        } else {
+            deltaSummary.innerHTML = `<strong>Seimbang:</strong> Usia pembuluh darah Anda sejalan dengan usia kronologis Anda (<strong>${data.age} tahun</strong>). Tidak terdeteksi akselerasi degenerasi vaskular primer.`;
+            deltaSummary.style.borderColor = 'var(--border-clinical)';
+            deltaSummary.style.backgroundColor = '#ffffff';
+        }
+
+        // 3. Populate Matrix Table Values
+        document.getElementById('tbBmiVal').textContent = `${data.bmi.toFixed(1)} kg/m²`;
+        const tbBmiStatus = document.getElementById('tbBmiStatus');
+        if (data.bmi <= 22.9) {
+            tbBmiStatus.innerHTML = '<span class="status-pill pill-optimal">Optimal</span>';
+        } else if (data.bmi <= 24.9) {
+            tbBmiStatus.innerHTML = '<span class="status-pill pill-warning">Kelebihan Beban</span>';
+        } else {
+            tbBmiStatus.innerHTML = '<span class="status-pill pill-critical">Obesitas</span>';
+        }
+
+        document.getElementById('tbSystolicVal').textContent = `${data.systolic} mmHg`;
+        const tbSystolicStatus = document.getElementById('tbSystolicStatus');
+        if (data.systolic < 120) {
+            tbSystolicStatus.innerHTML = '<span class="status-pill pill-optimal">Optimal</span>';
+        } else if (data.systolic < 140) {
+            tbSystolicStatus.innerHTML = '<span class="status-pill pill-warning">Pre-Hipertensi</span>';
+        } else {
+            tbSystolicStatus.innerHTML = '<span class="status-pill pill-critical">Hipertensif</span>';
+        }
+
+        document.getElementById('tbCholVal').textContent = 
+            data.chol === 'normal' ? 'Terkontrol (<200 mg/dL)' : 
+            data.chol === 'high' ? 'Tinggi / Terindikasi Statin' : 'Belum Uji Laboratorium';
+        
+        document.getElementById('tbSmokeVal').textContent = 
+            data.smoking === 'never' ? 'Bukan Perokok' :
+            data.smoking === 'former' ? 'Mantan Perokok' : 'Perokok Aktif / Vape';
+        
+        const tbSmokeStatus = document.getElementById('tbSmokeStatus');
+        if (data.smoking === 'never') {
+            tbSmokeStatus.innerHTML = '<span class="status-pill pill-optimal">Bebas Racun</span>';
+        } else if (data.smoking === 'former') {
+            tbSmokeStatus.innerHTML = '<span class="status-pill pill-optimal">Proses Pemulihan</span>';
+        } else {
+            tbSmokeStatus.innerHTML = '<span class="status-pill pill-critical">Beban Toksik Vaskular</span>';
+        }
+
+        document.getElementById('tbActivityVal').textContent = 
+            data.activity === 'high' ? 'Aktif (>150 mnt/mgg)' :
+            data.activity === 'moderate' ? 'Moderat (60-150 mnt/mgg)' : 'Sedentari (<60 mnt/mgg)';
+
+        // 4. Generate Targeted Clinical Prescriptions
+        generatePrescriptions(data);
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function generatePrescriptions(data) {
+        const container = document.getElementById('prescriptionsContainer');
+        container.innerHTML = '';
+
+        const recommendations = [];
+
+        // Blood pressure specific
+        if (data.systolic >= 130) {
+            recommendations.push({
+                badge: 'Intervensi Hemodinamik',
+                badgeColor: 'pill-critical',
+                title: 'Restriksi Asupan Natrium & Diet DASH',
+                instruction: 'Batasi konsumsi garam dapur maksimal 1 sendok teh per hari (<2000 mg natrium). Perbanyak asupan kalium dari pisang, bayam, dan alpukat untuk menurunkan resistensi vaskular perifer.'
+            });
+        }
+
+        // Tobacco / Vape
+        if (data.smoking === 'active') {
+            recommendations.push({
+                badge: 'Eliminasi Toksin',
+                badgeColor: 'pill-critical',
+                title: 'Program Penghentian Merokok / Vaping Total',
+                instruction: 'Nikotin dan karbon monoksida merusak lapisan endotel pembuluh darah. Berhenti merokok menurunkan risiko infark miokard hingga 50% dalam 12 bulan pertama.'
+            });
+        }
+
+        // Activity specific
+        if (data.activity === 'low') {
+            recommendations.push({
+                badge: 'Aktivitas Fisik',
+                badgeColor: 'pill-warning',
+                title: 'Peningkatan Kebugaran Aerobik Terukur',
+                instruction: 'Mulai dengan jalan cepat 30 menit per hari, minimal 5 hari seminggu. Latihan aerobik teratur meningkatkan kapasitas pompa jantung dan memperbaiki profil kolesterol HDL.'
+            });
+        }
+
+        // Cholesterol / Lab
+        if (data.chol === 'unknown' || data.chol === 'high') {
+            recommendations.push({
+                badge: 'Pemeriksaan Laboratorium',
+                badgeColor: data.chol === 'high' ? 'pill-critical' : 'pill-optimal',
+                title: 'Uji Profil Lipid Lengkap (Puasa 10-12 Jam)',
+                instruction: 'Lakukan pemeriksaan laboratorium untuk mengukur Kolesterol Total, LDL (jahat), HDL (baik), dan Trigliserida guna evaluasi risiko aterosklerosis lebih presisi.'
+            });
+        }
+
+        // BMI specific
+        if (data.bmi >= 23.0) {
+            recommendations.push({
+                badge: 'Manajemen Metabolik',
+                badgeColor: 'pill-warning',
+                title: 'Pengurangan Beban Massa Tubuh 5-7%',
+                instruction: 'Penurunan berat badan moderat sebesar 3-5 kg secara klinis terbukti menurunkan tekanan sistolik 3-8 mmHg dan menurunkan resistensi insulin sistemik.'
+            });
+        }
+
+        // Default preventive advice if already healthy
+        if (recommendations.length < 3) {
+            recommendations.push({
+                badge: 'Pemeliharaan Preventif',
+                badgeColor: 'pill-optimal',
+                title: 'Skrining Hemodinamik Berkala',
+                instruction: 'Lakukan pengukuran tekanan darah mandiri secara berkala 1-2 kali per bulan di apotek atau menggunakan tensimeter digital tervalidasi di rumah.'
+            });
+        }
+
+        recommendations.forEach(rx => {
+            const card = document.createElement('div');
+            card.className = 'prescription-card';
+            card.innerHTML = `
+                <span class="rx-badge ${rx.badgeColor}">${rx.badge}</span>
+                <div class="rx-title">${rx.title}</div>
+                <div class="rx-instruction">${rx.instruction}</div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    // Reset Form to Step 1
+    function resetAssessment() {
+        document.getElementById('resultsDashboard').style.display = 'none';
+        document.getElementById('stepperNav').style.display = 'grid';
+        proceedToStep(1);
+    }
+
+    // Initialize default BMI calculation on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        calculateBMI();
+    });
+</script>
+</body>
+</html>
